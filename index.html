@@ -707,7 +707,50 @@
       // enable sound after first tap/click due to browser autoplay policy
       document.body.addEventListener("click", function unlockSound(){ soundAllowed = true; document.body.removeEventListener("click", unlockSound); }, { once: true });
     }
+    /* =========================
+       Progress, Juz, Bookmark — additions without removing original logic
+       ========================= */
 
+    // Build juz navigation based on TOTAL_PAGES distribution (even split) — user can adjust mapping if needed
+    function computeJuzStarts(){
+      const arr = [];
+      const per = TOTAL_PAGES / 15;
+      for(let i=0;i<10;i++){
+        const page = Math.max(1, Math.round(i * per) + 1); // 1-based
+        arr.push(page);
+      }
+      return arr;
+    }
+
+    // Manual juz start mapping — sesuai mushaf Madinah (604 halaman)
+// Sesuaikan nomor halamannya dengan versi PDF / image kamu
+const juzStarts = [
+  1,   // Juz 1
+  8,  // Juz 2
+  23,  // Juz 3
+  41,  // Juz 4
+  59,  // Juz 5
+  72, // Juz 6
+  92, // Juz 7
+  109, // Juz 8
+  127, // Juz 9
+  148, // Juz 10
+  170,
+  185,
+  203,
+  221,
+  265
+];
+
+
+    function buildJuzNav(){
+      const $nav = $("#juzNav");
+      $nav.empty();
+      for(let i=1;i<=30;i++){
+        const btn = $("<button>").text(`Juz ${i}`).on("click", ()=>goTo(juzStarts[i-1]));
+        $nav.append(btn);
+      }
+    }
     // Bookmark controls
     function saveBookmark(){
       localStorage.setItem("lastPageQuran", currentPage);
